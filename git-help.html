@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git 常用操作指南</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .command {
+            margin-bottom: 20px;
+        }
+        .command h3 {
+            color: #555;
+            margin-bottom: 5px;
+        }
+        .command p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Git 常用操作指南</h1>
+
+    <div class="command">
+        <h3>1. 初始化仓库</h3>
+        <pre><code>git init</code></pre>
+        <p><strong>作用：</strong>在当前目录初始化一个新的Git仓库</p>
+        <p><strong>示例：</strong></p>
+        <pre><code>cd my-project
+git init</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>2. 克隆远程仓库</h3>
+        <pre><code>git clone &lt;repository-url&gt;</code></pre>
+        <p><strong>作用：</strong>克隆远程仓库到本地</p>
+        <p><strong>参数：</strong></p>
+        <ul>
+            <li>&lt;repository-url&gt;：远程仓库地址</li>
+        </ul>
+        <p><strong>示例：</strong></p>
+        <pre><code>git clone https://github.com/user/repo.git</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>3. 查看状态</h3>
+        <pre><code>git status</code></pre>
+        <p><strong>作用：</strong>查看当前工作目录和暂存区的状态</p>
+        <p><strong>示例：</strong></p>
+        <pre><code>git status</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>4. 添加文件到暂存区</h3>
+        <pre><code>git add &lt;file&gt;</code></pre>
+        <p><strong>作用：</strong>将文件添加到暂存区</p>
+        <p><strong>参数：</strong></p>
+        <ul>
+            <li>&lt;file&gt;：要添加的文件，可以使用<code>.</code>添加所有文件</li>
+        </ul>
+        <p><strong>示例：</strong></p>
+        <pre><code>git add .
+git add README.md</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>5. 提交更改</h3>
+        <pre><code>git commit -m "commit message"</code></pre>
+        <p><strong>作用：</strong>将暂存区的更改提交到本地仓库</p>
+        <p><strong>参数：</strong></p>
+        <ul>
+            <li>-m：提交信息</li>
+        </ul>
+        <p><strong>示例：</strong></p>
+        <pre><code>git commit -m "更新README文档"</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>6. 查看提交历史</h3>
+        <pre><code>git log</code></pre>
+        <p><strong>作用：</strong>查看提交历史记录</p>
+        <p><strong>常用选项：</strong></p>
+        <ul>
+            <li>--oneline：简洁显示</li>
+            <li>--graph：图形化显示分支</li>
+        </ul>
+        <p><strong>示例：</strong></p>
+        <pre><code>git log --oneline --graph</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>7. 创建分支</h3>
+        <pre><code>git branch &lt;branch-name&gt;</code></pre>
+        <p><strong>作用：</strong>创建新分支</p>
+        <p><strong>参数：</strong></p>
+        <ul>
+            <li>&lt;branch-name&gt;：分支名称</li>
+        </ul>
+        <p><strong>示例：</strong></p>
+        <pre><code>git branch feature/new-feature</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>8. 切换分支</h3>
+        <pre><code>git checkout &lt;branch-name&gt;</code></pre>
+        <p><strong>作用：</strong>切换到指定分支</p>
+        <p><strong>参数：</strong></p>
+        <ul>
+            <li>&lt;branch-name&gt;：要切换到的分支名称</li>
+        </ul>
+        <p><strong>示例：</strong></p>
+        <pre><code>git checkout main</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>9. 合并分支</h3>
+        <pre><code>git merge &lt;branch-name&gt;</code></pre>
+        <p><strong>作用：</strong>将指定分支合并到当前分支</p>
+        <p><strong>参数：</strong></p>
+        <ul>
+            <li>&lt;branch-name&gt;：要合并的分支名称</li>
+        </ul>
+        <p><strong>示例：</strong></p>
+        <pre><code>git checkout main
+git merge feature/new-feature</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>10. 推送更改到远程仓库</h3>
+        <pre><code>git push origin &lt;branch-name&gt;</code></pre>
+        <p><strong>作用：</strong>将本地分支的更改推送到远程仓库</p>
+        <p><strong>参数：</strong></p>
+        <ul>
+            <li>origin：远程仓库名称</li>
+            <li>&lt;branch-name&gt;：要推送的分支名称</li>
+        </ul>
+        <p><strong>示例：</strong></p>
+        <pre><code>git push origin main</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>11. 拉取远程更改</h3>
+        <pre><code>git pull origin &lt;branch-name&gt;</code></pre>
+        <p><strong>作用：</strong>从远程仓库拉取最新更改并合并到当前分支</p>
+        <p><strong>参数：</strong></p>
+        <ul>
+            <li>origin：远程仓库名称</li>
+            <li>&lt;branch-name&gt;：要拉取的分支名称</li>
+        </ul>
+        <p><strong>示例：</strong></p>
+        <pre><code>git pull origin main</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>12. 回滚到指定提交</h3>
+        <pre><code>git reset --hard &lt;commit-hash&gt;</code></pre>
+        <p><strong>作用：</strong>将当前分支重置到指定提交</p>
+        <p><strong>参数：</strong></p>
+        <ul>
+            <li>--hard：强制重置工作目录和暂存区</li>
+            <li>&lt;commit-hash&gt;：要回滚到的提交哈希值</li>
+        </ul>
+        <p><strong>示例：</strong></p>
+        <pre><code>git reset --hard a1b2c3d</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>13. 查看远程仓库</h3>
+        <pre><code>git remote -v</code></pre>
+        <p><strong>作用：</strong>查看已配置的远程仓库</p>
+        <p><strong>示例：</strong></p>
+        <pre><code>git remote -v</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>14. 添加远程仓库</h3>
+        <pre><code>git remote add origin &lt;repository-url&gt;</code></pre>
+        <p><strong>作用：</strong>添加一个新的远程仓库</p>
+        <p><strong>参数：</strong></p>
+        <ul>
+            <li>origin：远程仓库名称</li>
+            <li>&lt;repository-url&gt;：远程仓库地址</li>
+        </ul>
+        <p><strong>示例：</strong></p>
+        <pre><code>git remote add origin https://github.com/user/repo.git</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>15. 删除分支</h3>
+        <pre><code>git branch -d &lt;branch-name&gt;</code></pre>
+        <p><strong>作用：</strong>删除本地分支</p>
+        <p><strong>参数：</strong></p>
+        <ul>
+            <li>-d：删除已合并的分支</li>
+            <li>-D：强制删除未合并的分支</li>
+            <li>&lt;branch-name&gt;：要删除的分支名称</li>
+        </ul>
+        <p><strong>示例：</strong></p>
+        <pre><code>git branch -d feature/old-feature</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>16. 查看文件差异</h3>
+        <pre><code>git diff</code></pre>
+        <p><strong>作用：</strong>查看工作目录和暂存区之间的差异</p>
+        <p><strong>示例：</strong></p>
+        <pre><code>git diff</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>17. 暂存当前更改</h3>
+        <pre><code>git stash</code></pre>
+        <p><strong>作用：</strong>将当前工作目录的更改暂存起来</p>
+        <p><strong>示例：</strong></p>
+        <pre><code>git stash</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>18. 应用暂存的更改</h3>
+        <pre><code>git stash apply</code></pre>
+        <p><strong>作用：</strong>应用最近一次暂存的更改</p>
+        <p><strong>示例：</strong></p>
+        <pre><code>git stash apply</code></pre>
+    </div>
+
+    <div class="command">
+        <h3>19. 创建标签</h3>
+        <pre><code>git tag &lt;tag-name&gt;</code></pre>
+        <p><strong>作用：</strong>在当前提交创建标签</p>
+        <p><strong>参数：</strong></p>
+        <ul>
+            <li>&lt;tag-name&gt;：标签名称</li>
+        </ul>
+        <p><strong>示例：</strong></p>
+        <pre><code>git tag v1.0.0</code></pre>
+    </div>
+
+</body>
+</html>
