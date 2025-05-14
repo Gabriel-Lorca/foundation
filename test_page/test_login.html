@@ -34,7 +34,12 @@
                 });
 
                 const data = await response.json();
-                document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+                if (data.access_token) {
+                    document.getElementById('result').innerText = '登录成功!Token: ' + data;
+                } else {
+                    document.getElementById('result').innerText = '登录失败: ' + (data.detail || '未知错误');
+                }
+
             } catch (error) {
                 document.getElementById('result').innerText = '请求失败: ' + error.message;
             }
