@@ -10,15 +10,16 @@ import SidebarMenu from '../components/SidebarMenu';
  * 4. 右侧：数据展示和业务操作区域
  */
 const DashboardPage: React.FC = () => {
+  const [currentModule, setCurrentModule] = React.useState('');
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gridTemplateRows: '100px 1fr', height: '100vh', gap: '16px', padding: '16px' }}>
       {/* 顶部左侧LOGO区域 */}
 <div style={{ gridArea: '1 / 1 / 2 / 2', border: '1px solid #ccc', padding: '16px' }}>LOGO</div>
       {/* 顶部右侧模块名称区域 */}
-<div style={{ gridArea: '1 / 2 / 2 / 3', border: '1px solid #ccc', padding: '16px' }}>模块名称</div>
+<div style={{ gridArea: '1 / 2 / 2 / 3', border: '1px solid #ccc', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{currentModule || '模块名称'}</div>
       {/* 左侧侧边栏菜单区域 */}
-<div style={{ gridArea: '2 / 1 / 3 / 2', border: '1px solid #ccc', padding: '16px' }}><SidebarMenu/></div>
+<div style={{ gridArea: '2 / 1 / 3 / 2', border: '1px solid #ccc', padding: '16px' }}><SidebarMenu onMenuClick={(modulePath) => setCurrentModule(modulePath)}/></div>
       {/* 右侧数据展示和业务操作区域 */}
 <div style={{ gridArea: '2 / 2 / 3 / 3', border: '1px solid #ccc', padding: '16px' }}>数据展示和业务操作</div>
     </div>

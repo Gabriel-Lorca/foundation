@@ -8,6 +8,7 @@ import type { MenuProps } from 'antd';
  */
 interface SidebarMenuProps {
   items?: MenuProps['items'];
+  onMenuClick?: (modulePath: string) => void;
 }
 
 /**
@@ -15,7 +16,7 @@ interface SidebarMenuProps {
  * @param {SidebarMenuProps} props - 组件属性
  * @returns {React.ReactElement} 返回Ant Design的Menu组件
  */
-const SidebarMenu: React.FC<SidebarMenuProps> = ({ items: propItems }) => {
+const SidebarMenu: React.FC<SidebarMenuProps> = ({ items: propItems, onMenuClick }) => {
   // 菜单项状态管理
   const [items, setItems] = React.useState(propItems || []);
 
@@ -58,6 +59,25 @@ const fetchMenuData = async () => {
       defaultOpenKeys={[]}
       style={{ width: '100%', height: '100%' }}
       items={items}
+      onClick={({ keyPath }) => {
+        if (onMenuClick) {
+          for (const item of items) {
+            if (item && 'children' in item && 'label' in item && item?.key?.toString() === keyPath[1]) {
+              console.log('item:', item.label);
+              const children = item.children || [];
+              if (children.length > 0) {
+                for (const child of children) {
+                  if (child && 'label' in child && child?.key?.toString() === keyPath[0]) {
+                    console.log('child:', child.label);
+                    const modulePath = `${item.label}-${child.label}`;
+                    onMenuClick(modulePath);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }}
     />
   );
 };
