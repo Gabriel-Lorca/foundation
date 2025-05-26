@@ -155,10 +155,8 @@ Raises:
 
 @router.get("/modules")
 async def get_all_modules(db: Session = Depends(get_db)):
-    print("-------------1---------------")
     primary_modules = db.query(PrimaryModule).all()
     result = []
-    print("-------------2---------------")
     for primary_module in primary_modules:
         secondary_modules = db.query(SecondaryModule).filter(
             SecondaryModule.primary_module_id == primary_module.id).all()
@@ -172,7 +170,6 @@ async def get_all_modules(db: Session = Depends(get_db)):
                 } for secondary_module in secondary_modules
             ]
         }
-        print("-------------**---------------")
         result.append(module_data)
     print(result)
     return result
