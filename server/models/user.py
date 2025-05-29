@@ -12,6 +12,7 @@ class User(Base):
         phone_num:用户手机号.
         username: 用户名，字符串类型，唯一且必须索引，用于用户登录
         password_hash: 密码哈希值，字符串类型，存储加密后的用户密码
+        role_name: 角色名称
         role_id: 外键，关联角色表，表示用户所属角色
         is_deleted: 布尔类型,默认值为False,用于软删除标记
     """

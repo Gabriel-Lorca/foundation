@@ -12,6 +12,12 @@ interface User {
   is_deleted: boolean;
 }
 
+interface User_Update {
+  name: string;
+  phone_num: string;
+  role_name: string;
+}
+
 const UserList: React.FC = () => {
   
 
@@ -21,7 +27,7 @@ const UserList: React.FC = () => {
   // 新增状态：控制模态框显示、记录当前编辑用户
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [currentEditUser, setCurrentEditUser] = useState<User | null>(null);
-// 新增角色数据状态
+  // 新增角色数据状态
   const [roles, setRoles] = useState<string[]>([]);
 
   // 获取用户列表逻辑
@@ -48,6 +54,7 @@ const UserList: React.FC = () => {
     }
   };
 
+  // 删除用户逻辑
   const handleDelete = async (id: number) => {
     try {
       await axios.post(`http://127.0.0.1:8000/users/del/${id}`);
@@ -60,27 +67,23 @@ const UserList: React.FC = () => {
     }
   };
 
+  //编辑用户逻辑
+  const handleEditSubmit = async (value: User_Update) => {
+    try {
+      await axios.post(`http://127.0.0.1:8000/users/update/${currentEditUser!.id}`, value);
+      message.success('编辑成功');
+      
+    } catch (error) {
+      message.error('编辑失败');
+      console.error('编辑用户失败:', error);
+    }
+    setIsEditModalVisible(false)
+    fetchUsers();
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
-  
-
-  const handleEditSubmit = async (values: Omit<User, 'id' | 'is_deleted'>) => {
-    if (!currentEditUser) return;
-    try {
-      // 调用后端更新接口（假设接口为PUT /users/update/{id}）
-      await axios.put(`http://127.0.0.1:8000/users/update/${currentEditUser.id}`, {
-        ...values,
-        is_deleted: currentEditUser.is_deleted // 保持原禁用状态（根据需求调整）
-      });
-      message.success('用户信息更新成功');
-      setIsEditModalVisible(false); // 关闭模态框
-      fetchUsers(); // 刷新用户列表
-    } catch (error) {
-      message.error('用户信息更新失败');
-      console.error('更新用户失败:', error);
-    }
-  };
 
   const handleEdit = (user: User) => {
     fetchRoles(); // 确保在打开编辑模态框前获取角色数据
@@ -115,13 +118,13 @@ const UserList: React.FC = () => {
               <td>{user.role_name}</td>
               <td>
               {user.is_deleted ? (
-                  <span className="user-list-status user-list-status-deleted">禁用</span>
+                  <span className="user-list-status user-list-status-deleted" style={{ color: 'red' }}>禁用</span>
                 ) : (
                   <span className="user-list-status user-list-status-active">启用</span>
                 )}
               </td>
-              <td><button className="edit-btn" onClick={() => handleEdit(user)} disabled={user.id === 1}>
-                {user.id === 1 ? (
+              <td><button className="edit-btn" onClick={() => handleEdit(user)} disabled={user.id === 1 || user.is_deleted}>
+                {user.id === 1 || user.is_deleted ? (
                   <span className='user-list-status user-list-status-disabled'>禁止编辑</span>
                 ):(<span className='user-list-status user-list-status-disabled'>修改</span>)}
                   </button></td>
@@ -145,6 +148,8 @@ const UserList: React.FC = () => {
         title="编辑用户信息"
         // 假设使用新的属性来替代 visible，这里假设新属性名为 isModalOpen
         visible={isEditModalVisible}
+        okText="提交"
+        cancelText="取消"
         // 由于 onOk 期望的是鼠标事件处理函数，而 handleEditSubmit 需要表单值，
         // 这里手动触发表单提交以获取表单值并调用 handleEditSubmit
         onOk={() => {
@@ -170,10 +175,11 @@ const UserList: React.FC = () => {
           <Form.Item
             name="phone_num"
             label="手机号"
-            rules={[{ required: true, message: '请输入手机号' }]}
+            rules={[{ required: true, message: '请输入手机号' }, { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确' }]}
           >
             <Input placeholder="请输入手机号" />
           </Form.Item>
+
           <Form.Item
             name="role_name"
             label="角色"

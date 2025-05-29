@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import styles from './LoginPage.module.css';
 
 const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -24,36 +25,38 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '100px auto' }}>
-      <Form
-        name="login"
-        onFinish={onFinish}
-        layout="vertical"
-      >
-        <Form.Item
-          label="用户名"
-          name="username"
-          rules={[{ required: true, message: '请输入用户名' }]}
-        >
-          <Input />
-        </Form.Item>
+    <div className={styles.container}>
+        <div className={styles.loginBox}>
+            <Form
+              name="login"
+              onFinish={onFinish}
+              layout="vertical"
+            >
+              <Form.Item
+                label="用户名"
+                name="username"
+                rules={[{ required: true, message: '请输入用户名' }]}
+              >
+                <Input />
+              </Form.Item>
 
-        <Form.Item
-          label="密码"
-          name="password"
-          rules={[{ required: true, message: '请输入密码' }]}
-        >
-          <Input.Password />
-        </Form.Item>
+              <Form.Item
+                label="密码"
+                name="password"
+                rules={[{ required: true, message: '请输入密码' }]}
+              >
+                <Input.Password />
+              </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            登录
-          </Button>
-        </Form.Item>
-      </Form>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" loading={loading}>
+                  登录
+                </Button>
+              </Form.Item>
+            </Form>
+        </div>
     </div>
-  );
+);
 };
 
 export default LoginPage;

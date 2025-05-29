@@ -13,6 +13,5 @@ async def get_all_role(db: Session = Depends(get_db)):
     :param db:
     :return:
     """
-    print("Role")
     roles = db.query(Role).filter(Role.is_deleted == False).all()
     return [role.name for role in roles]
