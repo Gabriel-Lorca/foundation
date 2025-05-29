@@ -128,8 +128,11 @@ def add_users(db: Session):
     user_sys = db.query(User).filter(User.username == "admin").first()
     if not user_sys:
         new_user = User()
+        new_user.set_name("系统管理员")
+        new_user.set_phone_num("12345678901")
         new_user.set_username("admin")
         new_user.set_password("admin123")
+        new_user.set_role_name("系统管理员")
         new_user.set_role_id(sys_role.id)
         new_user.set_is_deleted(False)
         db.add(new_user)

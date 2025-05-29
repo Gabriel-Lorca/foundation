@@ -63,12 +63,10 @@ const fetchMenuData = async () => {
         if (onMenuClick) {
           for (const item of items) {
             if (item && 'children' in item && 'label' in item && item?.key?.toString() === keyPath[1]) {
-              console.log('item:', item.label);
               const children = item.children || [];
               if (children.length > 0) {
                 for (const child of children) {
                   if (child && 'label' in child && child?.key?.toString() === keyPath[0]) {
-                    console.log('child:', child.label);
                     const modulePath = `${item.label}-${child.label}`;
                     onMenuClick(modulePath);
                   }
