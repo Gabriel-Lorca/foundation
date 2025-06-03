@@ -52,8 +52,8 @@ async def add_role(role: RoleCreate, db: Session = Depends(get_db)):
                 db.add(db_roleModule)
                 db.commit()
             else:
-                second_module_list = (db.query(SecondaryModule).filter(SecondaryModule.primary_module_id == int(mode_id))
-                                      .all())
+                second_module_list = (db.query(SecondaryModule).
+                                      filter(SecondaryModule.primary_module_id == int(mode_id)).all())
                 for s_mode in second_module_list:
                     db_roleModule = RoleModule(role_id=db_role.id, primary_module_id=int(mode_id),
                                                secondary_module_id = s_mode.id)
@@ -105,6 +105,38 @@ async def del_role(role_id: int, db: Session = Depends(get_db)):
 
 @router.post("/update/{role_id}")
 async def update_role(role_id: int,up_data: RoleUpdate,db: Session = Depends(get_db)):
-    print(role_id)
-    print(vars(up_data))
+
+    try:
+        db_role = db.query(Role).filter(Role.id == role_id).first()
+        if db_role is None or not db_role.is_deletable:
+            raise HTTPException(status_code=404, detail="Role not found")
+        else:
+            # 更新角色表数据
+            db_role.name = up_data.name
+            db_role.description = up_data.description
+            db.commit()
+            db.refresh(db_role)
+
+            # 删除原本角色-权限关系表数据
+            db.query(RoleModule).filter(RoleModule.role_id == db_role.id).delete()
+            db.commit()
+
+            # 建立新的角色-权限关系
+            for mode_id in up_data.permission:
+                if '-' in mode_id:
+                    db_roleModule = RoleModule(role_id=db_role.id, primary_module_id=int(mode_id.split('-')[0]),
+                                               secondary_module_id=int(mode_id.split('-')[1]))
+                    db.add(db_roleModule)
+                    db.commit()
+                else:
+                    second_module_list = (db.query(SecondaryModule).
+                                          filter(SecondaryModule.primary_module_id == int(mode_id)).all())
+                    for s_mode in second_module_list:
+                        db_roleModule = RoleModule(role_id=db_role.id,primary_module_id=int(mode_id),
+                                                   secondary_module_id=s_mode.id)
+                        db.add(db_roleModule)
+                        db.commit()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
     return {"message": "User updated successfully", "role_id": role_id}
