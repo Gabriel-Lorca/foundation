@@ -107,7 +107,6 @@ class RoleModule(Base):
         role_id: 外键, 关联角色表, 不能为空, 表示关联的角色
         primary_module_id: 外键, 关联主模块表, 不能为空, 表示关联的主模块
         secondary_module_id: 外键, 关联子模块表, 不能为空, 表示关联的子模块
-        is_deleted: 布尔类型, 默认值为False, 用于软删除标记
     """
     __tablename__ = 'role_modules'
     __table_args__ = (
@@ -121,14 +120,14 @@ class RoleModule(Base):
     def get_role_id(self):
         return self.role_id
 
+    def set_role_id(self, role_id):
+        self.role_id = role_id
+
     def get_primary_module_id(self):
         return self.primary_module_id
 
     def get_secondary_module_id(self):
         return self.secondary_module_id
-
-    def set_role_id(self, role_id):
-        self.role_id = role_id
 
     def set_primary_module_id(self, primary_module_id):
         self.primary_module_id = primary_module_id

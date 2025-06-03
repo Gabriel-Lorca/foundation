@@ -16,14 +16,10 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     :param db:
     :return:
     """
-    db_user = User()
-    db_user.set_name(user.name)
-    db_user.set_phone_num(user.phone_num)
-    db_user.set_username(user.username)
+    db_user = User(name=user.name, phone_num=user.phone_num, username=user.username,
+                   role_name=user.role_name,is_deleted=False,s_deletable=True)
     db_user.set_password(user.password_hash)
-    db_user.set_role_name(user.role_name)
     db_user.set_role_id(db.query(Role).filter_by(name=user.role_name).first().id)
-    db_user.set_is_deleted(False)
     try:
         db.add(db_user)
         db.commit()
@@ -52,7 +48,7 @@ async def delete_user(user_id: int, db: Session = Depends(get_db)):
     :return:
     """
     user = db.query(User).filter(User.id == user_id).first()
-    if user is None or user.id == 1:
+    if not user or not user.s_deletable:
         raise HTTPException(status_code=404, detail="User not found")
     else:
         if user.is_deleted:

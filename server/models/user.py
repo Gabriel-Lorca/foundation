@@ -15,6 +15,7 @@ class User(Base):
         role_name: 角色名称
         role_id: 外键，关联角色表，表示用户所属角色
         is_deleted: 布尔类型,默认值为False,用于软删除标记
+        s_deletable: 布尔类型,默认值为True
     """
     __tablename__ = 'users'
 
@@ -26,6 +27,7 @@ class User(Base):
     role_name = Column(String, index=True)
     role_id = Column(Integer, ForeignKey('roles.id'))
     is_deleted = Column(Boolean, default=False, nullable=False)
+    s_deletable = Column(Boolean, default=True, nullable=False)
 
     pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
@@ -64,6 +66,12 @@ class User(Base):
 
     def get_is_deleted(self) -> bool:
         return self.is_deleted
+
+    def set_s_deletable(self, s_deletable: bool):
+        self.s_deletable = s_deletable
+
+    def get_s_deletable(self) -> bool:
+        return self.s_deletable
 
     def set_password(self, password):
         """

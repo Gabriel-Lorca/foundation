@@ -1,7 +1,9 @@
 import { Button, Form, Input, Select, message } from 'antd';
-import React, { useEffect, useState } from 'react';
+import apiAxios from '@../../../src/config/axios';
+import { useEffect, useState } from 'react';
 import styles from './AddUser.module.css';
-import axios from 'axios';
+
+
 
 interface User {
   id: number;
@@ -18,7 +20,7 @@ const AddUser = () => {
   // 获取角色数据逻辑（与获取用户列表同级）
   const fetchRoles = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/roles/all');
+      const response = await apiAxios.get('/roles/all');
       setRoles(response.data); // 假设接口返回格式为 string[]
     } catch (error) {
       console.error('获取角色列表失败:', error);
@@ -33,7 +35,7 @@ const AddUser = () => {
   const handleAddUser = async (value: User) => {
     try {
       console.log('新增用户数据:', value);
-      await axios.post(`http://127.0.0.1:8000/users/add_user`, value);
+      await apiAxios.post('/users/add_user', value);
       message.success('新增成功');
     } catch (error) {
       message.error('新增失败');

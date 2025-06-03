@@ -18,3 +18,6 @@ class UserUpdate(BaseModel):
 class User(BaseModel):
     id: int
     username: str
+
+
+

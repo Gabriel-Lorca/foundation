@@ -1,7 +1,8 @@
 import { Modal, Form, Input, Select, message } from 'antd';
 import React, { useEffect, useState } from 'react';
+import apiAxios from '@../../../src/config/axios';
 import styles from './UserList.module.css';
-import axios from 'axios';
+
 
 
 interface User {
@@ -10,6 +11,7 @@ interface User {
   phone_num: string;
   role_name: string;
   is_deleted: boolean;
+  s_deletable: boolean;
 }
 
 interface User_Update {
@@ -29,12 +31,14 @@ const UserList: React.FC = () => {
   const [currentEditUser, setCurrentEditUser] = useState<User | null>(null);
   // 新增角色数据状态
   const [roles, setRoles] = useState<string[]>([]);
+  // const [fo, setSelectedRoles] = useState<string[]>([]); // 新增角色状态
+  const [form] = Form.useForm(); // 获取表单实例
 
   // 获取用户列表逻辑
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://127.0.0.1:8000/users/all');
+      const response = await apiAxios.get('/users/all');
       setUsers(response.data);
     } catch (err) {
       setError('获取用户列表失败');
@@ -47,7 +51,7 @@ const UserList: React.FC = () => {
   // 获取角色数据逻辑（与获取用户列表同级）
   const fetchRoles = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/roles/all');
+      const response = await apiAxios.get('/roles/all');
       setRoles(response.data); // 假设接口返回格式为 string[]
     } catch (error) {
       console.error('获取角色列表失败:', error);
@@ -57,7 +61,7 @@ const UserList: React.FC = () => {
   // 删除用户逻辑
   const handleDelete = async (id: number) => {
     try {
-      await axios.post(`http://127.0.0.1:8000/users/del/${id}`);
+      await apiAxios.post(`/users/del/${id}`);
       message.success('删除成功');
       // 重新获取用户列表数据
       fetchUsers(); 
@@ -70,7 +74,7 @@ const UserList: React.FC = () => {
   //编辑用户逻辑
   const handleEditSubmit = async (value: User_Update) => {
     try {
-      await axios.post(`http://127.0.0.1:8000/users/update/${currentEditUser!.id}`, value);
+      await apiAxios.post(`/users/update/${currentEditUser!.id}`, value);
       message.success('编辑成功');
       
     } catch (error) {
@@ -84,6 +88,14 @@ const UserList: React.FC = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    
+    if (isEditModalVisible && currentEditUser) {
+      // 当模态框打开且有当前编辑用户时，初始化表单值
+      form.setFieldsValue(currentEditUser);
+    }
+  }, [isEditModalVisible,currentEditUser,form]);
 
   const handleEdit = (user: User) => {
     fetchRoles(); // 确保在打开编辑模态框前获取角色数据
@@ -123,15 +135,15 @@ const UserList: React.FC = () => {
                   <span className="user-list-status user-list-status-active">启用</span>
                 )}
               </td>
-              <td><button className="edit-btn" onClick={() => handleEdit(user)} disabled={user.id === 1 || user.is_deleted}>
-                {user.id === 1 || user.is_deleted ? (
+              <td><button className="edit-btn" onClick={() => handleEdit(user)} disabled={!user.s_deletable || user.is_deleted}>
+                {!user.s_deletable || user.is_deleted ? (
                   <span className='user-list-status user-list-status-disabled'>禁止编辑</span>
                 ):(<span className='user-list-status user-list-status-disabled'>修改</span>)}
                   </button></td>
              
               <td className="user-list-cell">
-                <button className="delete-btn" onClick={() => handleDelete(user.id)} disabled={user.id === 1}>
-                  {user.id === 1 ? (
+                <button className="delete-btn" onClick={() => handleDelete(user.id)} disabled={!user.s_deletable}>
+                  {!user.s_deletable ? (
                     <span className="user-list-status user-list-status-disabled">禁止删除</span>
                   ) : (user.is_deleted ? (
                     <span className="user-list-status user-list-status-deleted">恢复</span>
@@ -147,7 +159,7 @@ const UserList: React.FC = () => {
       <Modal
         title="编辑用户信息"
         // 假设使用新的属性来替代 visible，这里假设新属性名为 isModalOpen
-        visible={isEditModalVisible}
+        open={isEditModalVisible}
         okText="提交"
         cancelText="取消"
         // 由于 onOk 期望的是鼠标事件处理函数，而 handleEditSubmit 需要表单值，
@@ -161,8 +173,9 @@ const UserList: React.FC = () => {
         onCancel={() => setIsEditModalVisible(false)}
       >
         <Form
+          form={form}
         // 由于 currentEditUser 可能为 null，这里需要做非空判断，避免类型错误
-        initialValues={currentEditUser ? currentEditUser : undefined}
+          initialValues={currentEditUser ? currentEditUser : undefined}
           onFinish={handleEditSubmit}
         >
           <Form.Item

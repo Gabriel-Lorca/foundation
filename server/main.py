@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from server.database import engine, Base
+from pathlib import Path
+import yaml
 
 
 @asynccontextmanager
@@ -15,8 +17,20 @@ async def lifespan(fastapi_app: FastAPI):
     yield
     # 关闭时执行的代码
 
-app = FastAPI(lifespan=lifespan)
 
+# 读取yaml配置文件
+def load_config() -> dict:
+    # 获取YAML文件路径
+    config_path = Path(__file__).parent / "config.yaml"
+    with open(config_path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+# 加载配置
+config = load_config()
+
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -24,7 +38,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
-    )
+)
 
 from server.routers.user import router as user_router
 from server.routers.auth import router as auth_router

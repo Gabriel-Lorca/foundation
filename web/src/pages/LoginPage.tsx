@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import { Button, Form, Input } from 'antd';
-import axios from 'axios';
+import apiAxios from '@../../../src/config/axios';
 import { useNavigate } from 'react-router-dom';
 import styles from './LoginPage.module.css';
+import { Button, Form, Input } from 'antd';
+import React, { useState } from 'react';
+
+
+
 
 const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -14,7 +17,7 @@ const LoginPage: React.FC = () => {
       const formData = new FormData();
       formData.append('username', values.username);
       formData.append('password', values.password);
-      const response = await axios.post('http://127.0.0.1:8000/token', formData);
+      const response = await apiAxios.post('/token', formData);
       localStorage.setItem('loginResponse', JSON.stringify(response.data));
       navigate('/dashboard');
     } catch (error) {
