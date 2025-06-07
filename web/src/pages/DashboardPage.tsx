@@ -1,5 +1,6 @@
 import React from 'react';
 import SidebarMenu from '../components/SidebarMenu';
+import config from '../config';
 
 /**
  * 仪表盘页面组件
@@ -13,11 +14,7 @@ const DashboardPage: React.FC = () => {
   const [currentModule, setCurrentModule] = React.useState('');
   
 
-  const moduleComponentMap: Record<string, React.LazyExoticComponent<React.ComponentType>> = {
-    '系统管理-用户管理': React.lazy(() => import('../modules/system-manage/UserManagement')),
-    '系统管理-角色管理': React.lazy(() => import('../modules/system-manage/RoleManagement')),
-    '系统管理-模块管理': React.lazy(() => import('../modules/system-manage/ModeManagement')),
-  };
+  const moduleComponentMap: Record<string, React.LazyExoticComponent<React.ComponentType>> = config.menu_data
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gridTemplateRows: '100px 1fr', height: '100vh', gap: '16px', padding: '16px' }}>

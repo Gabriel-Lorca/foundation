@@ -108,7 +108,7 @@ const UserList: React.FC = () => {
 
   return (
     <div className={styles['user-list']}>
-      <h3>用户列表</h3>
+      
       <table className={styles['user-list-table']}>
         <thead>
           <tr>

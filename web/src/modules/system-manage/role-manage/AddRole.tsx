@@ -84,8 +84,7 @@ const AddRole = () => {
   };
 
   return (
-    <div>
-      <h3>新增角色</h3>
+    <div style={{ width: '50%', margin: '0 auto' }}>
       <Form
         name="addUserForm"
         layout="vertical"

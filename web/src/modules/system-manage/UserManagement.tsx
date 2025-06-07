@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import UserList from './user-manage/UserList';
 import AddUser from './user-manage/AddUser';
+import { Radio,Divider } from 'antd';
 
 const UserManagement = () => {
   const [activeTab, setActiveTab] = useState('userList');
@@ -8,20 +9,13 @@ const UserManagement = () => {
   return (
     <div className="user-management">
       <div className="tabs">
-        <button 
-          className={activeTab === 'userList' ? 'active' : ''}
-          onClick={() => setActiveTab('userList')}
-        >
-          用户列表
-        </button>
-        <button
-          className={activeTab === 'AddUser' ? 'active' : ''}
-          onClick={() => setActiveTab('AddUser')}
-        >
-          新增用户
-        </button>
-        
-      <hr className="tab-divider" />
+        <Radio.Group>
+          <Radio.Button className={activeTab === 'userList' ? 'active' : ''}
+          onClick={() => setActiveTab('userList')} value="userList">用户列表</Radio.Button>
+          <Radio.Button className={activeTab === 'AddUser' ? 'active' : ''}
+          onClick={() => setActiveTab('AddUser')} value="AddUser">新增用户</Radio.Button>
+        </Radio.Group>
+        <Divider dashed />
       </div>
       
       <div className="tab-content">

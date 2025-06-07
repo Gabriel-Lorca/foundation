@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu } from 'antd';
 import type { MenuProps } from 'antd';
+import config from '../config/index'; // 假设config已导出apiBaseUrl
 
 /**
  * SidebarMenu组件属性接口
@@ -36,7 +37,7 @@ const fetchMenuData = async () => {
     // 解析并获取access_token
     const token = loginResponse? JSON.parse(loginResponse).access_token : '';
     // 请求菜单数据接口
-    const response = await fetch('http://127.0.0.1:8000/menu/', {
+    const response = await fetch(`${config.apiBaseUrl}/menu/`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
